@@ -5,7 +5,8 @@ _SOLR_TOP_LEVEL_HOME="$HTRC_EF_PACKAGE_HOME/solr7"
 if [ "$short_hostname" = "nema" ] || [ "${short_hostname%[1-2]}" = "solr" ] ; then
   _SOLR_HOME="$_SOLR_TOP_LEVEL_HOME/server/solr"
 else 
-  _SOLR_HOME="/hdfsd05/dbbridge/solr-ef"
+  #_SOLR_HOME="/hdfsd05/dbbridge/solr-ef"
+  _SOLR_HOME="$_SOLR_TOP_LEVEL_HOME/server/solr"
 fi
 
 if [ "$short_hostname" = "gsliscluster1" ] ; then
@@ -18,7 +19,7 @@ if [ "$short_hostname" = "gsliscluster1" ] ; then
   #   htrc-ef-solr-setup-local-disk-all.sh to work
   export SOLR_HOME="$HTRC_EF_PACKAGE_HOME/solr/server/solr"
 else
-  # on one of the gc nodes (or nema)
+  # on one of the gc nodes (or nema), or solr1 or solr2
   export SOLR_TOP_LEVEL_HOME="$_SOLR_TOP_LEVEL_HOME"
   export PATH="$SOLR_TOP_LEVEL_HOME/bin:$PATH"
 

@@ -6,7 +6,8 @@
 #
 #   solr1 and solr2 need to be set up to run Solr cloud servers
 
-short_hostname=`hostname -s`
+#short_hostname=`hostname -s`
+short_hostname=`uname -n | sed 's/\..*//'`
 
 if [ "$short_hostname" = "gsliscluster1" ] ; then
     do_echo=1
@@ -58,23 +59,40 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   export SOLR_SHARDS="$SOLR_SHARDS /disk0/solr-full-ef /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
   export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef /disk9/solr-full-ef"
 
+  export SOLR_SERVER_BASE_JETTY_DIR=/disk0
+  
   #export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
-  export SOLR_JAVA_MEM="-Xmx14g"  
+  export SOLR_JAVA_MEM="-Xmx14g"
+elif [ "$short_hostname" = "immensity" ] ; then
+  export ZOOKEEPER_SERVER=localhost:8181
+
+  export SOLR_NODES="localhost:8983 localhost:8984 "
+  export SOLR_SHARDS="/tmp/solr-full-ef-node1 /tmp/solr-full-ef-node2"
+
+  export SOLR_SERVER_BASE_JETTY_DIR=/tmp
   
-else # gslis-cluster1 or gc[0-9]
-#  export ZOOKEEPER_SERVER=solr1-s:8181
-#  export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
-#  export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
-
-  export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
-  export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
-  export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
-  export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
-
-  # should the following not be export?
-  HDFS_HEAD=hdfs://gchead:9000
+#  for d in $SOLR_SHARDS ; do
+#      if [ ! -d "$d" ] ; then
+#	  mkdir "$d"
+#      fi
+#  done  
 fi
+  
+if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
+    # e.g., gslis-cluster1 or gc[0-9]
+    
+    #  export ZOOKEEPER_SERVER=solr1-s:8181
+
+    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
+    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
+    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
+    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
+
+    # should the following not be export?
+    HDFS_HEAD=hdfs://gchead:9000
+fi
+
 
 if [ "${short_hostname%[0-9]}" = "gc" ] ; then
   ## export HTRC_EF_PACKAGE_HOME="/hdfsd05/dbbridge/gslis-cluster"
@@ -106,7 +124,28 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     export PATH="$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/scripts:$PATH"
     if [ $do_echo = 1 ] ; then        
       echo "* Added in HTRC-Solr-EF-Ingester scripting into PATH"
-  fi
+    fi
+
+    #if [ "${short_hostname%[1-2]}" != "solr" ] ; then
+    if [ -d "$SPARK_HOME/" ] ; then        
+	spark_conf_slaves="$SPARK_HOME/conf/slaves" 
+	if [ ! -f "$spark_conf_slaves" ] ; then
+	    echo "****"
+	    echo "* Populating $spark_conf_slaves" 
+	    echo "* With: $SPARK_SLAVE_HOSTS"
+	    echo "****"
+	    for s in $SPARK_SLAVE_HOSTS ; do
+		echo $s >> "$spark_conf_slaves"
+	    done
+	else
+	    slaves=`cat "$spark_conf_slaves" | tr '\n' ' '`
+	    if [ $do_echo = 1 ] ; then        
+		echo "****"
+		echo "* Spark slaves: $slaves"
+		echo "****"
+	    fi
+	fi
+    fi
 fi
 
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
@@ -119,26 +158,6 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
   fi
 fi
 
-#if [ "${short_hostname%[1-2]}" != "solr" ] ; then
-if [ -d "$SPARK_HOME/" ] ; then        
-  spark_conf_slaves="$SPARK_HOME/conf/slaves" 
-  if [ ! -f "$spark_conf_slaves" ] ; then
-    echo "****"
-    echo "* Populatig $spark_conf_slaves" 
-    echo "* With: $SPARK_SLAVE_HOSTS"
-    echo "****"
-    for s in $SPARK_SLAVE_HOSTS ; do
-      echo $s >> "$spark_conf_slaves"
-    done
-  else
-    slaves=`cat "$spark_conf_slaves" | tr '\n' ' '`
-    if [ $do_echo = 1 ] ; then        
-      echo "****"
-      echo "* Spark slaves: $slaves"
-      echo "****"
-    fi
-  fi
-fi
 
 #if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
 if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
