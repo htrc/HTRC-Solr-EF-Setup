@@ -14,15 +14,19 @@ else
     do_echo=0
 fi
 
-export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-#if [ "${short_hostname%[1-2]}" = "solr" ] ; then
-#  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-#else
-#  #export JAVA_HOME="$HTRC_EF_NETWORK_HOME/jdk1.8.0"
-#  # gsliscluster1 and gc[0-9] now seem to have Java 1.8 installed  
-#  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-#fi
+if [ "x$JAVA_HOME" = "x" ] ; then    
+    export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+    #if [ "${short_hostname%[1-2]}" = "solr" ] ; then
+    #  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+    #else
+    #  #export JAVA_HOME="$HTRC_EF_NETWORK_HOME/jdk1.8.0"
+    #  # gsliscluster1 and gc[0-9] now seem to have Java 1.8 installed  
+    #  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+    #fi
+fi
+
 export PATH="$JAVA_HOME/bin:$PATH"
+    
 #export _JAVA_OPTIONS="-Xmx512m"
 #export _JAVA_OPTIONS="-Xmx1024m"
 #export _JAVA_OPTIONS="-Xmx2048m"
@@ -30,7 +34,8 @@ export _JAVA_OPTIONS=
 #export _JAVA_OPTIONS="-XX:+HeapDumpOnOutOfMemoryError"
 
 if [ $do_echo = 1 ] ; then    
-  echo "* Added in JDK 1.8 into PATH"
+    echo "* Added in JDK 1.8 into PATH"
+    echo "* set _JAVA_OPTIONS to the empty string"
 fi
 
 # Note: 'gchead' stopped working at some point, so changed to specifying its IP value 
@@ -108,7 +113,7 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
   source setup/setup-zookeeper.bash 
   source setup/setup-solr7.bash
 
-  export PATH="$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/SCRIPTS:$PATH"
+  export PATH="$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/scripts:$PATH"
     if [ $do_echo = 1 ] ; then        
       echo "* Added in HTRC-Solr-EF-Cloud scripting into PATH"
   fi
