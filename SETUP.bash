@@ -14,6 +14,25 @@ else
     do_echo=0
 fi
 
+export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+#if [ "${short_hostname%[1-2]}" = "solr" ] ; then
+#  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+#else
+#  #export JAVA_HOME="$HTRC_EF_NETWORK_HOME/jdk1.8.0"
+#  # gsliscluster1 and gc[0-9] now seem to have Java 1.8 installed  
+#  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+#fi
+export PATH="$JAVA_HOME/bin:$PATH"
+#export _JAVA_OPTIONS="-Xmx512m"
+#export _JAVA_OPTIONS="-Xmx1024m"
+#export _JAVA_OPTIONS="-Xmx2048m"
+export _JAVA_OPTIONS=
+#export _JAVA_OPTIONS="-XX:+HeapDumpOnOutOfMemoryError"
+
+if [ $do_echo = 1 ] ; then    
+  echo "* Added in JDK 1.8 into PATH"
+fi
+
 # Note: 'gchead' stopped working at some point, so changed to specifying its IP value 
 #export SPARK_MASTER_HOST=gchead
 export SPARK_MASTER_HOST=192.168.64.1
@@ -68,48 +87,35 @@ if [ $do_echo = 1 ] ; then
   echo "****"
 fi
 
-if [ "${short_hostname%[1-2]}" = "solr" ] ; then
-  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-else
-  #export JAVA_HOME="$HTRC_EF_NETWORK_HOME/jdk1.8.0"
-  # gsliscluster1 and gc[0-9] now seem to have Java 1.8 installed  
-  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-fi
 
-export PATH="$JAVA_HOME/bin:$PATH"
-#export _JAVA_OPTIONS="-Xmx512m"
-#export _JAVA_OPTIONS="-Xmx1024m"
-#export _JAVA_OPTIONS="-Xmx2048m"
-export _JAVA_OPTIONS=
-#export _JAVA_OPTIONS="-XX:+HeapDumpOnOutOfMemoryError"
-
-if [ $do_echo = 1 ] ; then    
-  echo "* Added in JDK 1.8 into PATH"
-fi
-
-if [ "${short_hostname%[1-2]}" == "solr" ] ; then
-  source setup/setup-zookeeper.bash 
-  source setup/setup-solr7.bash
-else
-  source setup/setup-spark.bash
-fi
-
+#if [ "${short_hostname%[1-2]}" == "solr" ] ; then
+#  source setup/setup-zookeeper.bash 
+#  source setup/setup-solr7.bash
+#else
+#  source setup/setup-spark.bash
+#fi
 
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
-  export PATH="$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/scripts:$PATH"
+    source setup/setup-spark.bash
+
+    export PATH="$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/scripts:$PATH"
     if [ $do_echo = 1 ] ; then        
       echo "* Added in HTRC-Solr-EF-Ingester scripting into PATH"
   fi
 fi
 
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
+  source setup/setup-zookeeper.bash 
+  source setup/setup-solr7.bash
+
   export PATH="$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/SCRIPTS:$PATH"
     if [ $do_echo = 1 ] ; then        
       echo "* Added in HTRC-Solr-EF-Cloud scripting into PATH"
   fi
 fi
 
-if [ "${short_hostname%[1-2]}" != "solr" ] ; then    
+#if [ "${short_hostname%[1-2]}" != "solr" ] ; then
+if [ -d "$SPARK_HOME/" ] ; then        
   spark_conf_slaves="$SPARK_HOME/conf/slaves" 
   if [ ! -f "$spark_conf_slaves" ] ; then
     echo "****"
@@ -129,15 +135,15 @@ if [ "${short_hostname%[1-2]}" != "solr" ] ; then
   fi
 fi
 
-if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
-
+#if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
+if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
   zookeeper_config_file="$ZOOKEEPER_HOME/conf/zoo.cfg"
   zookeeper_data_dir="$ZOOKEEPER_HOME/data"
 
   if [ ! -f "$zookeeper_config_file" ] ; then
     echo "****"
     echo "* Generating $zookeeper_config_file" 
-    cat CONF/zoo.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
+    cat conf/zoo.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
 
     if [ ! -d "$zookeeper_data_dir" ] ; then
 	echo "* Creating Zookeeper dataDir:"
@@ -154,11 +160,12 @@ if [ $do_echo = 1 ] ; then
   echo "****"
 fi
 
-if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
-  
+#if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
+if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
+	
   solr_configsets="$SOLR_TOP_LEVEL_HOME/server/solr/configsets"
   if [ ! -d "$solr_configsets/htrc_configs" ] ; then
     echo "Untarring htrc_configs.tar.gz in Solr configtests directory"
-    tar xvzf CONF/htrc_configs.tar.gz -C "$solr_configsets"
+    tar xvzf conf/htrc_configs.tar.gz -C "$solr_configsets"
   fi
 fi
