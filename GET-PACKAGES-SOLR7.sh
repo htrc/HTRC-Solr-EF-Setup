@@ -37,3 +37,10 @@ if [ $get_solr = "y" ] ; then
     echo "***"
     echo ""
 fi
+
+echo ""
+echo "***"
+echo "Now run ./GET-PACKAGES-ZOOCREEPER.sh (if not alrady done so)"
+echo "  This will enable you to take backup snapshots of the Zookeeper files"
+echo "***"
+echo ""
