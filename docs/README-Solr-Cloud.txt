@@ -7,9 +7,12 @@ echo $JAVA_HOME
 if not set, will default to
    "/usr/lib/jvm/j2sdk1.8-oracle"
     
-ensure can ssh in to machines
+ensure can ssh in to machines (solr1 solr2) from solr1 without password
 
-add SETUP in .bashrc file
+
+add SETUP.bash in .bashrc file
+
+open new terminal
 
 htrc-ef-zookeeper-start-all.sh
 
