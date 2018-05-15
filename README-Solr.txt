@@ -1,4 +1,5 @@
-./GET-PACKAGES-SPARK.sh 
+./GET-PACKAGES-SOLR.sh
+./GET-PACKAGES-ZOOCREEPER.sh 
 
 git clone https://github.com/htrc/HTRC-Solr-EF-Cloud
 
