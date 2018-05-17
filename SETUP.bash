@@ -71,28 +71,7 @@ elif [ "$short_hostname" = "immensity" ] ; then
   export SOLR_SHARDS="/tmp/solr-full-ef-node1 /tmp/solr-full-ef-node2"
 
   export SOLR_SERVER_BASE_JETTY_DIR=/tmp
-  
-#  for d in $SOLR_SHARDS ; do
-#      if [ ! -d "$d" ] ; then
-#	  mkdir "$d"
-#      fi
-#  done  
 fi
-  
-if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
-    # e.g., gslis-cluster1 or gc[0-9]
-    
-    #  export ZOOKEEPER_SERVER=solr1-s:8181
-
-    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
-    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
-    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
-    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
-
-    # should the following not be export?
-    HDFS_HEAD=hdfs://gchead:9000
-fi
-
 
 if [ "${short_hostname%[0-9]}" = "gc" ] ; then
   ## export HTRC_EF_PACKAGE_HOME="/hdfsd05/dbbridge/gslis-cluster"
@@ -104,6 +83,20 @@ else
 fi
 
 HTRC_EF_NETWORK_HOME=`pwd`
+
+if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
+    # e.g., gslis-cluster1 or gc[0-9]
+    
+    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
+    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
+    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
+    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
+
+    export HDFS_HEAD=hdfs://gchead:9000
+    export YARN_CONF_DIR=/etc/hadoop/conf
+fi
+
+
 
 if [ $do_echo = 1 ] ; then
   echo ""
@@ -127,7 +120,13 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     fi
 
     #if [ "${short_hostname%[1-2]}" != "solr" ] ; then
-    if [ -d "$SPARK_HOME/" ] ; then        
+    if [ -d "$SPARK_HOME/" ] ; then
+	spark_conf_defaults="$SPARK_HOME/conf/spark-defaults.conf" 
+	if [ ! -f "$spark_conf_defaults" ] ; then
+	    echo "* Copying conf/spark-defaults.conf -> $spark_conf_defaults"
+	    /bin/cp conf/spark-defaults.conf "$spark_conf_defaults"
+	fi
+
 	spark_conf_slaves="$SPARK_HOME/conf/slaves" 
 	if [ ! -f "$spark_conf_slaves" ] ; then
 	    echo "****"
@@ -136,7 +135,7 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
 	    echo "****"
 	    for s in $SPARK_SLAVE_HOSTS ; do
 		echo $s >> "$spark_conf_slaves"
-	    done
+	    done	    
 	else
 	    slaves=`cat "$spark_conf_slaves" | tr '\n' ' '`
 	    if [ $do_echo = 1 ] ; then        
