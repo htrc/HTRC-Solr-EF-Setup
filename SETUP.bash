@@ -1,4 +1,9 @@
 
+store_cwd="`pwd`"
+htrc_ef_home=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd "$htrc_ef_home"
+
+
 # 'short_hostname' used to control blocks of setup code run below:
 #
 #   gsliscluster1 and gc0, gc1, ... gc9 need to be setup for Spark + knowledge of Solr endpoint
@@ -192,3 +197,5 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
     tar xvzf conf/htrc_configs.tar.gz -C "$solr_configsets"
   fi
 fi
+
+cd "$store_cwd"
