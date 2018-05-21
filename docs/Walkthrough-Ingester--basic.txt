@@ -1,0 +1,114 @@
+Preamble
+========
+
+The following walkthrough is for the Solr Spark Ingester code setup
+in on:
+
+  gsliscluster1.lis.illinois.edu
+
+in directory:
+
+/data0/HTRC-Solr-EF-Setup
+
+It assumes there is a Solr Cloud installation running that can be access
+through the endpoint:
+
+  http://solr1.ischool.illinois.edu/solr/
+
+To access the Solr admin interface contact:
+
+  davidb@waikato.ac.nz
+
+to get account login information.
+
+
+In the details below, subsitute your username for <username>
+Your should also check that your username is in the 'htrc' group
+
+This can be done with:
+
+  groups
+
+Contact Brynnen (owen AT illinois.edu) if this is not the case.
+
+
+Walkthrough -- Basic
+====================
+
+The purpose of this walkthrough is to:
+
+  (i) Get your command-line terminal setup with the necessary
+      enviornment variables needed to run the Solr EF Ingester code
+
+(ii) Create a Solr collection that you then stream a small set of
+      Extracted Feature JSON files to for indexing
+ 
+1. Environment Setup
+====================
+
+With VPN on if needed, log in to 'gsliscluster1':
+
+  ssh <username>@gsliscluster1.lis.illinois.edu
+
+Add the following to your .bashrc file:
+
+  source /data0/HTRC-Solr-EF-Setup/SETUP.bash
+
+Logout, and then log in again.
+
+2. Build a Test Collection
+==========================
+
+Move to the directory where the Spark Ingest code is:
+
+  cd  "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/"
+
+Create a new collection on the Solr cloud, where you have substituted
+your username for <username> in the following:
+
+  wget "http://solr1-s:8983/solr/admin/collections?action=CREATE&name=<username>-fict1055&numShards=4&replicationFactor=1&collection.configName=htrc_configs" -O -
+
+Note: This this test collection was have specified only 4 shards in
+      the Solr cloud.  In the production collection, we use the value 20.
+
+And now start the ingest the:
+
+  ./JSONLIST-YARN-INGEST.sh miles-fict1055
+
+This script is hard-wired to ingest 1055 EF JSON files located on the
+Hadoop Distributed File System (HDFS).  It starts by reading in:
+
+ hdfs:///user/dbbridge/pair-tree-annika-1k-fiction-vol-ids.txt
+
+which is a text file that specifies the 1055 JSON files to read
+(also on on HDFS).
+
+You should be able to list the file with:
+
+  hdfs dfs -ls /user/dbbridge
+
+A local copy also exists in the 'HTRC-Solr-EF-Ingester' directory
+(which is easier to look at), but (to be clear) it is the one on HDFS
+that the Spark code accesses when you run the Ingest script.
+
+All going well, you should be able to access your new collection via the Solr admin interface.
+
+In a web browser, visit:
+
+  https://solr1.ischool.illinois.edu/solr/index.html
+
+Enter:
+  username: admin
+  password: <password>
+
+On the lefthand side, select your collection:
+
+  <username>-fict1055
+
+Then click on the 'Query' link, also on the left.
+
+Once the interface updates, you'll have a form for entering a query.
+There are lots of fields to mess around with, but the defaults (with
+q=*:*) is fine for testing.  Just hit 'Execute Query' to get the first
+10 hits returned in JSON format.
+
