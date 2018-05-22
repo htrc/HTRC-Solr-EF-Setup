@@ -11,24 +11,26 @@ cd "$htrc_ef_home"
 #
 #   solr1 and solr2 need to be set up to run Solr cloud servers
 
+# Using 'uname' looks to be more portable than 'hostname'
+#  where minus arguments vary
 #short_hostname=`hostname -s`
 short_hostname=`uname -n | sed 's/\..*//'`
 
-if [ "$short_hostname" = "gsliscluster1" ] ; then
-    do_echo=1
-else
-    do_echo=0
-fi
+case $- in
+    *i*) # interactive
+	if [ "$short_hostname" = "gsliscluster1" ] ; then
+	    do_echo=1
+	else
+	    do_echo=0
+	fi
+	;;
+    *) # otherwise non-interactive
+	do_echo=0
+	;;
+esac
 
 if [ "x$JAVA_HOME" = "x" ] ; then    
     export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-    #if [ "${short_hostname%[1-2]}" = "solr" ] ; then
-    #  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-    #else
-    #  #export JAVA_HOME="$HTRC_EF_NETWORK_HOME/jdk1.8.0"
-    #  # gsliscluster1 and gc[0-9] now seem to have Java 1.8 installed  
-    #  export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
-    #fi
 fi
 
 export PATH="$JAVA_HOME/bin:$PATH"
@@ -108,14 +110,6 @@ if [ $do_echo = 1 ] ; then
   echo "****"
 fi
 
-
-#if [ "${short_hostname%[1-2]}" == "solr" ] ; then
-#  source setup/setup-zookeeper.bash 
-#  source setup/setup-solr7.bash
-#else
-#  source setup/setup-spark.bash
-#fi
-
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     source setup/setup-spark.bash
 
@@ -124,7 +118,6 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
       echo "* Added in HTRC-Solr-EF-Ingester scripting into PATH"
     fi
 
-    #if [ "${short_hostname%[1-2]}" != "solr" ] ; then
     if [ -d "$SPARK_HOME/" ] ; then
 	spark_conf_defaults="$SPARK_HOME/conf/spark-defaults.conf" 
 	if [ ! -f "$spark_conf_defaults" ] ; then
@@ -163,7 +156,6 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
 fi
 
 
-#if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
 if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
   zookeeper_config_file="$ZOOKEEPER_HOME/conf/zoo.cfg"
   zookeeper_data_dir="$ZOOKEEPER_HOME/data"
@@ -188,7 +180,6 @@ if [ $do_echo = 1 ] ; then
   echo "****"
 fi
 
-#if [ "${short_hostname%[1-2]}" = "solr" ] ; then    
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
 	
   solr_configsets="$SOLR_TOP_LEVEL_HOME/server/solr/configsets"
