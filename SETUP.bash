@@ -89,7 +89,7 @@ else
   export HTRC_EF_PACKAGE_HOME=`pwd`
 fi
 
-HTRC_EF_NETWORK_HOME=`pwd`
+export HTRC_EF_NETWORK_HOME=`pwd`
 
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     # e.g., gslis-cluster1 or gc[0-9]
