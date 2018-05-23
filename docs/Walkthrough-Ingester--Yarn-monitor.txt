@@ -87,6 +87,10 @@ You should see something similar to the following snapshot:
 
   Walkthrough-Ingester--Yarn-monitor-snapshot.png
 
+which is in the docs folder alongside this walkthrough file.  Also:
+
+  https://github.com/htrc/HTRC-Solr-EF-Setup/blob/master/docs/Walkthrough-Ingester--Yarn-monitor-snapshot.png
+
 2. Run an ingest
 ================
 
