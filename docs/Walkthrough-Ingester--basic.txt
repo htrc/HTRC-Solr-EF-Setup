@@ -73,7 +73,7 @@ Note: This this test collection was have specified only 4 shards in
 
 And now start the ingest the:
 
-  ./JSONLIST-YARN-INGEST.sh miles-fict1055
+  ./JSONLIST-YARN-INGEST.sh <username>-fict1055-htrc-baselilne
 
 This script is hard-wired to ingest 1055 EF JSON files located on the
 Hadoop Distributed File System (HDFS).  It starts by reading in:
