@@ -1,0 +1,108 @@
+Preamble
+========
+
+It is assumed you have already worked through:
+
+  Walkthrough-Ingester--basic.txt
+
+Walkthrough -- Yarn-monitor
+===========================
+
+The purpose of this walkthrough is to:
+
+   (i) Run an ingest of Solr Extracted Feature JSON files on the Spark
+       cluster, and then
+  (ii) monitor its progress through the Hadoop/YARN
+       web-browser dashboard
+
+For (i) we need to ingest a slightly larger set of JSON files
+than that done in 'Walkthrough-Ingester--basic.txt'.  We can
+use the same basic command as before:
+
+  ./JSONLIST-YARN-INGEST.sh
+
+but will supply additional command-line arguments to it.
+
+For (ii) we need to set up network entries that allow your host
+computer to access the private network of the cluster computer
+(gchead, gc1, etc).  The walkthrough starts with this part of the
+setup first.
+
+1. Network Hosts
+================
+
+The following assumes you are working from a Linux machine with admin
+rights.  If not, then a useful alternative is to set up a VM on your
+host machine in which to do the work.  This has been done successfully
+using VirtualBox on a Windows PC running an Ubuntu 15.04 guest
+machine, and is what the details below are based on.
+
+
+Install the University of Illinois specific VPN client, if not already done so:
+
+  https://techservices.illinois.edu/services/virtual-private-networking-vpn/download-and-set-up-the-vpn-client
+
+Start the VPN client:
+
+  /opt/cisco/anyconnect/bin/vpnui &
+
+and connect to:
+
+  vpn.cities.illinois.edu
+
+
+Now edit your /etc/hosts file, so it contains the lines:
+
+  192.168.64.1  gchead gchead-local
+  192.168.64.18 gc0 gc0-local
+  192.168.64.19 gc1 gc1-local
+  192.168.64.20 gc2 gc2-local
+  192.168.64.21 gc3 gc3-local
+  192.168.64.22 gc4 gc4-local
+  192.168.64.23 gc5 gc5-local
+  192.168.64.24 gc6 gc6-local
+  192.168.64.25 gc7 gc7-local
+  192.168.64.26 gc8 gc8-local
+  192.168.64.27 gc9 gc9-local
+
+In your web-browser's proxy settings, make sure you have SOCKS_v5 set to:
+  SOCKS Host: localhost
+  Port: 9999
+
+An Ubuntu distribution should have Firefox as an installed browser by default.
+
+Then run:
+
+  ssh -D 9999 <username>@gsliscluster1.lis.illinois.edu
+
+substituting your Illinois username for <username>
+
+Finally, visit:
+
+  http://gchead:8088/cluster/
+
+to see the Hadoop/YARN dashboard.
+
+You should see something similar to the following snapshot:
+
+  Walkthrough-Ingester--Yarn-monitor-snapshot.png
+
+2. Run an ingest
+================
+
+Similar to Walkthrough-Ingester--basic, create a collection on the
+Solr cloud, this time with a collection name that reflects the fact
+the we will be processing 32205 volumes (the full version of
+Ted Underwood's Fiction workset v0.1)
+
+  wget "http://solr1-s:8983/solr/admin/collections?action=CREATE&name=$USER-fict32205-htrc-baseline&numShards=20&replicationFactor=1&collection.configName=htrc_configs" -O -
+ 
+Now start the ingest:
+
+ ./JSONLIST-YARN-INGEST.sh $USER-fict32205-htrc-baseline htrc_configs 20 /user/dbbridge/fict-full-pairtree-ids.txt
+
+
+And monitor its progress through:
+
+  http://gchead:8088/cluster/
+
