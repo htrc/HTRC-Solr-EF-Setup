@@ -1,0 +1,95 @@
+Preamble
+========
+
+It is assumed you have already worked through:
+
+  Walkthrough-Ingester--Yarn-monitor.txt
+
+Walkthrough -- Bespoke Solr config
+==================================
+
+The purpose of this walkthrough is to:
+
+   (i) Create a custom solr configuration on the Solr Cloud
+  (ii) Run an ingest of Solr Extracted Feature JSON files on the Spark
+       cluster that makes use of it
+
+For (i) we need to work directly on the server providing the Solr cloud
+
+For (ii), as with other ingest walkthroughs, we need to work on the
+Spark cluster, and will again make use of:
+
+  ./JSONLIST-YARN-INGEST.sh
+
+using its command-line arguments to specify the custom/bespoke
+Solr config created in (i)
+
+1. Solr Cloud
+=============
+
+Log in to the Solr cloud:
+
+  ssh solr1.ischool.illinois.edu
+
+And move to where the HTRC-EF-Solr-Setup is installed:
+
+  cd $HTRC_NETWORK_HOME/
+
+The original baseline Solr configset created for indexing/searching
+the HTRC Extracted Features is called 'htrc-configs-baseline'
+You will find it in the HTRC-EF-Solr-Setup 'conf' area:
+
+  cd conf/solr7.2.1
+  ls -l
+
+See README-Solr-Schema.txt for details
+
+To make a customized variation of this (say, that sets 'docval'
+to be true for fields used by HTRC for indexing/searching)
+start by making a copy of the configset directory:
+
+
+  /bin/cp -r htrc-configs-baseline htrc-configs-<CUSTOMNAME>
+
+where <CUSTOMNAME> would be changed to something like 'docval'
+for the suggested example.
+
+Edit the file:
+
+  htrc-configs-<CUSTOMNAME>/conf/mananaged-schema
+
+For example, making make the non-stored 'htrc' fields have the docval as true
+
+Now return to the top-level HTRC-Solr-EF-Setup directory:
+
+  cd ../..
+
+And copy the custom Solr configset into the solr7 file hierarchy:
+
+  /bin/cp -r conf/solr7.2.1/htrc-configs-<CUSTOMNAME> solr7/server/solr/configsets/.
+
+This now needs to be pushed into Zookeeper so it is visible to all the
+Solr instances running:
+
+  solr zk upconfig -d solr7/server/solr/configsets/htrc-configs-baseline -n htrc-configs-baseline  -z $ZOOKEEPER_SERVER
+
+
+2. Run an ingest using the custom configset
+===========================================
+
+
+Create a collection (name of your choosing) with the configset you
+have made
+
+  wget "http://solr1-s:8983/solr/admin/collections?action=CREATE&name=$USER-fict1055-htrc-configs-<CUSTOMNAME>&numShards=4&replicationFactor=1&collection.configName=htrc-configs-<CUSTOMNAME>" -O -
+
+Now start the ingest:
+
+  ./JSONLIST-YARN-INGEST.sh $USER-fict1055-htrc-configs-<CUSTOMNAME> htrc-configs-<CUSTOMNAME>
+
+
+This builds a small collection (based on the 1055 fict set).  If building a larger collection then
+monitor its progress in the usual way:
+
+  http://gchead:8088/cluster/
+
