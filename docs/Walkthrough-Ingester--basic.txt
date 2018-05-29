@@ -23,7 +23,10 @@ to get account login information.
 
 
 In the details below, subsitute your username for <username>
-Your should also check that your username is in the 'htrc' group
+Your should also check that your username is in the 'htrc' group.
+Where bash variable substitution takes place (such as issuing
+the 'wget' command below), $USER is used in the syntax given
+for convenience.
 
 This can be done with:
 
@@ -66,14 +69,14 @@ Move to the directory where the Spark Ingest code is:
 Create a new collection on the Solr cloud, where you have substituted
 your username for <username> in the following:
 
-  wget "http://solr1-s:8983/solr/admin/collections?action=CREATE&name=<username>-fict1055&numShards=4&replicationFactor=1&collection.configName=htrc_configs" -O -
+  wget "http://solr1-s:8983/solr/admin/collections?action=CREATE&name=$USER-fict1055&numShards=4&replicationFactor=1&collection.configName=htrc_configs" -O -
 
 Note: This this test collection was have specified only 4 shards in
       the Solr cloud.  In the production collection, we use the value 20.
 
 And now start the ingest the:
 
-  ./JSONLIST-YARN-INGEST.sh <username>-fict1055-htrc-baselilne
+  ./JSONLIST-YARN-INGEST.sh $USER-fict1055-htrc-baselilne
 
 This script is hard-wired to ingest 1055 EF JSON files located on the
 Hadoop Distributed File System (HDFS).  It starts by reading in:
