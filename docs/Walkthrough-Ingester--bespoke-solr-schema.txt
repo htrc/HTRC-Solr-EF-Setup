@@ -92,7 +92,7 @@ configset directory:
 
 Edit the file:
 
-  htrc-configs-<CUSTOMNAME>/conf/mananaged-schema
+  htrc-configs-<CUSTOMNAME>/conf/managed-schema
 
 For example, making the non-stored 'htrc' fields have the docval as true, for example,
 if following the scenario mentioned above
@@ -108,7 +108,7 @@ And copy the custom Solr configset into the solr7 file hierarchy:
 This now needs to be pushed into Zookeeper so it is visible to all the
 Solr instances running:
 
-  solr zk upconfig -d solr7/server/solr/configsets/htrc-configs-baseline -n htrc-configs-baseline  -z $ZOOKEEPER_SERVER
+  solr zk upconfig -d solr7/server/solr/configsets/htrc-configs-<CUSTOMNAME> -n htrc-configs-<CUSTOMNAME>  -z $ZOOKEEPER_SERVER
 
 
 Over time, following this line of work will produce a growing number
@@ -136,6 +136,9 @@ walkthroughs: create the collection using the restful Solr API,
 and then ingest a set of JSON files.  Let's build a small
 collection based on the 1055 fict set.
 
+  ssh gsliscluster1.lis.illinois.edu
+  cd "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/"
+  
 Relying on $USER to resolve to your usename, and replacing
 <CUSTOMNAME> with the suffix you have used in creating
 the configset, enter:
