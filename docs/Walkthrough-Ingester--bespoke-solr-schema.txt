@@ -71,7 +71,7 @@ And copy the custom Solr configset into the solr7 file hierarchy:
 This now needs to be pushed into Zookeeper so it is visible to all the
 Solr instances running:
 
-  solr zk upconfig -d solr7/server/solr/configsets/htrc-configs-baseline -n htrc-configs-baseline  -z $ZOOKEEPER_SERVER
+  solr zk upconfig -d solr7/server/solr/configsets/htrc-configs-<CUSTOMNAME> -n htrc-configs-<CUSTONNAME>  -z $ZOOKEEPER_SERVER
 
 
 2. Run an ingest using the custom configset
