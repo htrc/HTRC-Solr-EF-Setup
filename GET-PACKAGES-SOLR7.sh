@@ -1,10 +1,12 @@
 #!/bin/bash
 
 get_zookeeper="y"
-zookeeper_ver=3.4.9
+#zookeeper_ver=3.4.9
+zookeeper_ver=3.4.13
 
 get_solr="y"
-solr_ver=7.2.1
+#solr_ver=7.2.1
+solr_ver=7.4.0
 
 if [ $get_zookeeper = "y" ] ; then
     echo "***"
@@ -24,12 +26,13 @@ if [ $get_solr = "y" ] ; then
     echo ""
     echo "***"
     echo "Solr $solr_ver"
-    echo "Note: There is a newer version out (7.3 released April 2018)"
-    echo " => consider upgrading?"
+#    echo "Note: There is a newer version out (7.3 released April 2018)"
+#    echo " => consider upgrading?"
     echo "***"
     echo ""
     /bin/rm -f solr-$solr_ver.tgz solr7
-    wget http://archive.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
+#    wget http://archive.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
+     wget http://www.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
 	&& tar xvzf solr-$solr_ver.tgz \
 	&& ln -s solr-$solr_ver solr7 \
 	&& echo && echo "Created symbolic link 'solr7'"
@@ -42,7 +45,7 @@ echo ""
 echo "***"
 echo "Now run:"
 echo "  ./GET-PACKAGES-ZOOCREEPER.sh"
-echo "(if not alrady done so)"
+echo "(if not already done so)"
 echo "This will enable you to take backup snapshots of the Zookeeper files"
 echo "***"
 echo ""
