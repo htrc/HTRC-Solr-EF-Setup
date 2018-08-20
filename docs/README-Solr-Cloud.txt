@@ -17,6 +17,13 @@ This README file covers Component (ii) Solr-Cloud
 Installation
 ============
 
+The install scripts expect 'git', a JDK and 'unzip' to be installed on
+the Linux distro.  For monitoring CPU usage, 'htop' is also a useful
+utility to have.  Using 'apt-get' these can be installed with:
+
+  sudo apt-get install git oracle-j2sdk1.8 unzip htop
+
+
 To check out the code needed to run the Solr cloud,
 do the following:
 
@@ -33,17 +40,21 @@ the Java source code and compiles it.
 If you do not have JAVA_HOME explictly set, it will default to:
    /usr/lib/jvm/j2sdk1.8-oracle
 
-In the instruction below this has been done in the /homea/solr-ef/ directory.
-Modify the relevant statements according if installing in a different
-directory.
+In the instruction below this has been done in the /homea/solr-ef/ directory,
+and assumes a 20 Solr cloud is to be run across solr1 and solr2.
+
+  Modify the relevant statements according if installing in a different
+  directory.
+
+  Modify the environment variables set in SETUP.bash (see below) if your
+  cloud configuration is different.
 
 Setup
 =====
 
 To setup your environment to run this code, edit your ~/.bashrc file to include:
 
-  store_cwd="`pwd`"
-  cd /homea/solr-ef/HTRC-Solr-EF-Setup && source ./SETUP.bash && cd "$store_cwd"
+  source /homea/solr-ef/HTRC-Solr-EF-Setup/SETUP.bash
 
 The values in SETUP.bash assume:
 
