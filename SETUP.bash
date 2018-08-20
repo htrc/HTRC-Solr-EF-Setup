@@ -71,6 +71,35 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   #export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
   export SOLR_JAVA_MEM="-Xmx14g"
+elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
+  export ZOOKEEPER_SERVER=solr3:8181
+
+  export SOLR_NODES="solr3:8983 solr3:8984 solr3:8985 solr3:8986 solr3:8987 solr3:8988 solr3:8989 solr3:8990"
+  export SOLR_NODES="$SOLR_NODES solr4:8983 solr4:8984 solr4:8985 solr4:8986 solr4:8987 solr4:8988 solr4:8989 solr4:8990"
+  export SOLR_NODES="$SOLR_NODES solr5:8983 solr5:8984 solr5:8985 solr5:8986 solr5:8987 solr5:8988 solr5:8989 solr5:8990"
+  export SOLR_NODES="$SOLR_NODES solr6:8983 solr6:8984 solr6:8985 solr6:8986 solr6:8987 solr6:8988 solr6:8989 solr6:8990"
+
+  # solr3
+  export SOLR_SHARDS="/disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  # solr4  
+  export SOLR_SHARDS="$SOLR_SHARDS /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  # solr5
+  export SOLR_SHARDS="$SOLR_SHARDS /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  # solr6  
+  export SOLR_SHARDS="$SOLR_SHARDS /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+
+  # consider making this /opt/ ????
+  #export SOLR_SERVER_BASE_JETTY_DIR=/disk1
+  export SOLR_SERVER_BASE_JETTY_DIR=/opt
+  
+  # export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
+  # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
+  export SOLR_JAVA_MEM="-Xmx14g"
+
 elif [ "$short_hostname" = "immensity" ] ; then
   export ZOOKEEPER_SERVER=localhost:8181
 
