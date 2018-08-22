@@ -200,15 +200,29 @@ if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
   zookeeper_data_dir="$ZOOKEEPER_HOME/data"
 
   if [ ! -f "$zookeeper_config_file" ] ; then
-    echo "****"
-    echo "* Generating $zookeeper_config_file" 
-    cat conf/zoo.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
-
     if [ ! -d "$zookeeper_data_dir" ] ; then
 	echo "* Creating Zookeeper dataDir:"
 	echo "*   $zookeeper_data_dir"
 	mkdir "$zookeeper_data_dir"
     fi
+      
+    echo "****"
+    echo "* Generating $zookeeper_config_file"
+    if [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
+	cat conf/zoo-ensemble.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
+	if [ "$short_hostname" = "is-solr3" ] ; then
+	    echo "1" > "$zookeeper_data_dir/myid"
+	fi
+	if [ "$short_hostname" = "is-solr4" ] ; then
+	    echo "2" > "$zookeeper_data_dir/myid"
+	fi
+	if [ "$short_hostname" = "is-solr5" ] ; then
+	    echo "3" > "$zookeeper_data_dir/myid"
+	fi
+    else
+	cat conf/zoo.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
+    fi
+    
     echo "****"
   fi
 fi
