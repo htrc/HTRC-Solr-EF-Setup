@@ -74,6 +74,24 @@ when logged in to 'solr1' you can run:
 
 without needing to enter your password.
 
+
+[
+  In the case where HTRC-Solr-EF-Setup is not on a networked disk,
+  then using rsync once things have been set up on one machine to
+  clone the files to the other machines is useful.  Having
+  set up one machine (e.g. sol3), for each other host machine in
+  the mix you could do the following:
+
+    sudo mkdir /opt/HTRC-Solr-EF-Setup
+    sudo chown $username /opt/HTRC-Solr-EF-Setup
+    sudo chgrp htrc /opt/HTRC-Solr-EF-Setup
+    sudo chmod g+s /opt/HTRC-Solr-EF-Setup
+
+    cd /opt/
+    rsync -pavH solr3:/opt/HTRC-Solr-EF-Setup/. HTRC-Solr-EF-Setup/.
+]
+
+
 Finally, each solr node in the cluster needs to run its own Jetty
 server.  To set these up, run:
 
