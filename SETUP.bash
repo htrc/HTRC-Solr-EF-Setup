@@ -3,7 +3,6 @@ store_cwd="`pwd`"
 htrc_ef_home=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd "$htrc_ef_home"
 
-
 # 'short_hostname' used to control blocks of setup code run below:
 #
 #   gsliscluster1 and gc0, gc1, ... gc9 need to be setup for Spark + knowledge of Solr endpoint
@@ -15,6 +14,14 @@ cd "$htrc_ef_home"
 #  where minus arguments vary
 #short_hostname=`hostname -s`
 short_hostname=`uname -n | sed 's/\..*//'`
+
+# ****
+# The reason for controllilng a NETWOR_HOME, separate to
+# a PACKAGE_HOME is no longer particularly strong, and
+# the following can be simplified further
+
+export HTRC_EF_NETWORK_HOME=`pwd`
+export HTRC_EF_PACKAGE_HOME=`pwd`
 
 case $- in
     *i*) # interactive
@@ -74,31 +81,45 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
 elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
   export ZOOKEEPER_SERVER=solr3:8181
 
+  export SOLR_PID_DIR="$HTRC_EF_PACKAGE_HOME/solr-jetty-pids"
+  if [ ! -d "$SOLR_PID_DIR" ] ; then
+      mkdir "$SOLR_PID_DIR"
+  fi
+  
   export SOLR_NODES="solr3:8983 solr3:8984 solr3:8985 solr3:8986 solr3:8987 solr3:8988 solr3:8989 solr3:8990"
   export SOLR_NODES="$SOLR_NODES solr4:8983 solr4:8984 solr4:8985 solr4:8986 solr4:8987 solr4:8988 solr4:8989 solr4:8990"
   export SOLR_NODES="$SOLR_NODES solr5:8983 solr5:8984 solr5:8985 solr5:8986 solr5:8987 solr5:8988 solr5:8989 solr5:8990"
   export SOLR_NODES="$SOLR_NODES solr6:8983 solr6:8984 solr6:8985 solr6:8986 solr6:8987 solr6:8988 solr6:8989 solr6:8990"
 
+  root_solr_shard_dir=htrc-ef-solr-shards
   # solr3
-  export SOLR_SHARDS="/disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
-  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  export SOLR_SHARDS="/disk1/$root_solr_shard_dir /disk2/$root_solr_shard_dir /disk3/$root_solr_shard_dir /disk4/$root_solr_shard_dir"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/$root_solr_shard_dir /disk6/$root_solr_shard_dir /disk7/$root_solr_shard_dir /disk8/$root_solr_shard_dir"
   # solr4  
-  export SOLR_SHARDS="$SOLR_SHARDS /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
-  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk1/$root_solr_shard_dir /disk2/$root_solr_shard_dir /disk3/$root_solr_shard_dir /disk4/$root_solr_shard_dir"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/$root_solr_shard_dir /disk6/$root_solr_shard_dir /disk7/$root_solr_shard_dir /disk8/$root_solr_shard_dir"
   # solr5
-  export SOLR_SHARDS="$SOLR_SHARDS /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
-  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk1/$root_solr_shard_dir /disk2/$root_solr_shard_dir /disk3/$root_solr_shard_dir /disk4/$root_solr_shard_dir"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/$root_solr_shard_dir /disk6/$root_solr_shard_dir /disk7/$root_solr_shard_dir /disk8/$root_solr_shard_dir"
   # solr6  
-  export SOLR_SHARDS="$SOLR_SHARDS /disk1/solr-full-ef /disk2/solr-full-ef /disk3/solr-full-ef /disk4/solr-full-ef"
-  export SOLR_SHARDS="$SOLR_SHARDS /disk5/solr-full-ef /disk6/solr-full-ef /disk7/solr-full-ef /disk8/solr-full-ef"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk1/$root_solr_shard_dir /disk2/$root_solr_shard_dir /disk3/$root_solr_shard_dir /disk4/$root_solr_shard_dir"
+  export SOLR_SHARDS="$SOLR_SHARDS /disk5/$root_solr_shard_dir /disk6/$root_solr_shard_dir /disk7/$root_solr_shard_dir /disk8/$root_solr_shard_dir"
 
   # consider making this /opt/ ????
   #export SOLR_SERVER_BASE_JETTY_DIR=/disk1
-  export SOLR_SERVER_BASE_JETTY_DIR=/opt
+  export SOLR_SERVER_BASE_JETTY_DIR=/var/local/htrc-ef-jetty-servers
   
-  # export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
+  # 14g used for the solr1 + solr2 config
+  # solr3-6 config uses less shards per box, so bump up the value slightly
+  # Note: JRE performance will drop off if value goes about 32G as JRE needs
+  #       to switch from using compressed pointers to long pointers
+  #       -- see: https://lucene.apache.org/solr/guide/7_4/taking-solr-to-production.html
+  export SOLR_JAVA_MEM="-Xmx20g"
+
+  # tail of previous vals used over time (from most recent to oldest)
+  # export SOLR_JAVA_MEM="-Xmx14g"
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
-  export SOLR_JAVA_MEM="-Xmx14g"
+  # export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
 
 elif [ "$short_hostname" = "immensity" ] ; then
   export ZOOKEEPER_SERVER=localhost:8181
@@ -108,17 +129,6 @@ elif [ "$short_hostname" = "immensity" ] ; then
 
   export SOLR_SERVER_BASE_JETTY_DIR=/tmp
 fi
-
-if [ "${short_hostname%[0-9]}" = "gc" ] ; then
-  ## export HTRC_EF_PACKAGE_HOME="/hdfsd05/dbbridge/gslis-cluster"
-  #export HTRC_EF_PACKAGE_HOME="/hdfsd05/dbbridge/HTRC-Solr-EF-Setup"
-  #export HTRC_EF_PACKAGE_HOME="/data0/dbbridge/gslis-cluster"
-  export HTRC_EF_PACKAGE_HOME=`pwd`
-else
-  export HTRC_EF_PACKAGE_HOME=`pwd`
-fi
-
-export HTRC_EF_NETWORK_HOME=`pwd`
 
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     # e.g., gslis-cluster1 or gc[0-9]
