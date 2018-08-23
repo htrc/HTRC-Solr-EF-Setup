@@ -89,6 +89,18 @@ without needing to enter your password.
 
     cd /opt/
     rsync -pavH solr3:/opt/HTRC-Solr-EF-Setup/. HTRC-Solr-EF-Setup/.
+
+  Similarly for where the jetty servers that solr uses are located
+    
+    sudo mkdir /var/local/htrc-ef-jetty-servers
+    sudo chown dbbridge /var/local/htrc-ef-jetty-servers
+    sudo chgrp htrc /var/local/htrc-ef-jetty-servers
+    sudo chmod g+s /var/local/htrc-ef-jetty-servers
+
+    ssh solr4
+    ...
+
+
 ]
 
 
