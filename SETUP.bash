@@ -78,6 +78,7 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   #export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
   export SOLR_JAVA_MEM="-Xmx14g"
+
 elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
   export ZOOKEEPER_SERVER=solr3:8181
 
