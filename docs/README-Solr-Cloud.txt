@@ -107,6 +107,13 @@ without needing to enter your password.
 Finally, each solr node in the cluster needs to run its own Jetty
 server.  To set these up, run:
 
+  TOPUP-SOLR-JETTY.sh
+
+to allow the Jetty server to support CORS, and require login to access
+the admin pages.
+
+Then:
+
   htrc-ef-solr-setup-local-disk-all.sh
 
 Compilation
