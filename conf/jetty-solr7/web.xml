@@ -205,6 +205,10 @@
     <web-resource-collection>
       <web-resource-name>Secured area</web-resource-name>
       <url-pattern>/index.html</url-pattern>
+      <url-pattern>/admin/*</url-pattern>
+      <!--
+	  <url-pattern>/partials/*</url-pattern>
+      -->
     </web-resource-collection>
     <auth-constraint>
       <role-name>admin</role-name>
