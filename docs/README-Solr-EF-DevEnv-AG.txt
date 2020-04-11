@@ -73,7 +73,18 @@ where the Analytics-Gateway code is:
     vagrant ssh
 
     ln -s /devenv_sources/Analytics-Gateway
-        cd Analytics-Gateway
+    cd Analytics-Gateway
+
+
+Switch branch
+  cd checkout solr-ef
+  
+Check-out the Solr-EF search web interface
+(ultimately this gets dynamically loaded within the AG ReactJS/Play Framework )
+
+  cd public
+  ./CLONE-SOLR-EF.sh
+  cd ..
 
 
 Start all the services:
