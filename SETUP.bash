@@ -108,7 +108,7 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
 
   # consider making this /opt/ ????
   #export SOLR_SERVER_BASE_JETTY_DIR=/disk1
-  export SOLR_SERVER_BASE_JETTY_DIR=/var/local/htrc-ef-jetty-servers
+  export SOLR_SERVER_BASE_JETTY_DIR=/usr/local/htrc-ef-jetty-servers
   
   # 14g used for the solr1 + solr2 config
   # solr3-6 config uses less shards per box, so bump up the value slightly

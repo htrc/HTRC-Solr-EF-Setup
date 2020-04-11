@@ -1,0 +1,12 @@
+tickTime=2000
+dataDir=@zookeeper-data-dir@
+clientPort=@zookeeper-port@
+
+initLimit=5
+syncLimit=2
+server.1=solr3:9288:9388
+server.2=solr4:9288:9388
+server.3=solr5:9288:9388
+
+autopurge.snapRetainCount=3
+autopurge.purgeInterval=1

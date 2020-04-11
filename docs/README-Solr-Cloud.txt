@@ -92,10 +92,10 @@ without needing to enter your password.
 
   Similarly for where the jetty servers that solr uses are located
     
-    sudo mkdir /var/local/htrc-ef-jetty-servers
-    sudo chown dbbridge /var/local/htrc-ef-jetty-servers
-    sudo chgrp htrc /var/local/htrc-ef-jetty-servers
-    sudo chmod g+s /var/local/htrc-ef-jetty-servers
+    sudo mkdir /usr/local/htrc-ef-jetty-servers
+    sudo chown dbbridge /usr/local/htrc-ef-jetty-servers
+    sudo chgrp htrc /usr/local/htrc-ef-jetty-servers
+    sudo chmod g+s /usr/local/htrc-ef-jetty-servers
 
     ssh solr4
     ...
