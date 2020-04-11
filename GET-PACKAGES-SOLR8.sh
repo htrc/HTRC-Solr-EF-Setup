@@ -45,7 +45,7 @@ if [ ! -d zookeeper-master ] ; then
   echo ""
   echo "***"
   echo "Now run:"
-  echo "  ./GET-PACKAGES-ZOOCREEPER.sh"
+  echo "  ./GET-PACKAGES-ZOOCREEPER8.sh"
   echo "This will enable you to take backup snapshots of the Zookeeper files"
   echo "***"
   echo ""
