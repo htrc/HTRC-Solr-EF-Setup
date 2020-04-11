@@ -15,9 +15,9 @@ if [ $get_zookeeper = "y" ] ; then
     echo "Zookeeper $zookeeper_ver"
     echo "***"
     /bin/rm -f zookeeper-$zookeeper_ver.tar.gz zookeeper-for-solr8
-    wget http://archive.apache.org/dist/zookeeper/zookeeper-$zookeeper_ver/apache-zookeeper-$zookeeper_ver.tar.gz \
-	&& tar xvzf apache-zookeeper-$zookeeper_ver.tar.gz \
-	&& ln -s apache-zookeeper-$zookeeper_ver zookeeper-for-solr8 \
+    wget http://archive.apache.org/dist/zookeeper/zookeeper-$zookeeper_ver/apache-zookeeper-$zookeeper_ver-bin.tar.gz \
+	&& tar xvzf apache-zookeeper-$zookeeper_ver-bin.tar.gz \
+	&& ln -s apache-zookeeper-$zookeeper_ver-bin zookeeper-for-solr8 \
 	&& echo && echo "Created symbolic link 'zookeeper-for-solr8'"
     echo "***"
     echo ""
