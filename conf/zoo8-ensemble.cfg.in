@@ -2,6 +2,7 @@ tickTime=2000
 dataDir=@zookeeper8-data-dir@
 clientPort=@zookeeper8-port@
 admin.serverPort=@zookeeper8-admin-port@
+4lw.commands.whitelist=mntr,conf,ruok
 
 initLimit=5
 syncLimit=2
