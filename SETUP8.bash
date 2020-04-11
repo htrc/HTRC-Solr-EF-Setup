@@ -79,7 +79,9 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   export SOLR8_SHARDS="$SOLR8_SHARDS /disk5/solr8-full-ef /disk6/solr8-full-ef /disk7/solr8-full-ef /disk8/solr8-full-ef /disk9/solr8-full-ef"
 
   export SOLR8_SERVER_BASE_JETTY_DIR=/disk0/solr8-jetty-servers
-
+  if [ ! -d "$SOLR8_SERVER_BASE_JETTY_DIR" ] ; then
+      mkdir "$SOLR8_SERVER_BASE_JETTY_DIR"
+  fi
   #export SOLR_JAVA_MEM="-Xms10g -Xmx15g"
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
   export SOLR_JAVA_MEM="-Xmx14g"
