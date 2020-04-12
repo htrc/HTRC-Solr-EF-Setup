@@ -1,9 +1,9 @@
 
-export SOLR_TOP_LEVEL_HOME="$HTRC_EF_PACKAGE_HOME/solr7"
-export SOLR_HOME="$SOLR_TOP_LEVEL_HOME/server/solr"
-export SOLR_PID_DIR="$SOLR_HOME"
+export SOLR7_TOP_LEVEL_HOME="$HTRC_EF_PACKAGE_HOME/solr7"
+export SOLR7_HOME="$SOLR_TOP_LEVEL_HOME/server/solr"
+#export SOLR_PID_DIR="$SOLR_HOME"
 
-export PATH="$SOLR_TOP_LEVEL_HOME/bin:$PATH"
+#export PATH="$SOLR_TOP_LEVEL_HOME/bin:$PATH"
 
 
 
