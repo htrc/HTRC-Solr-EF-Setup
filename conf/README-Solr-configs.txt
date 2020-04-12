@@ -37,7 +37,7 @@ And just a bit furhter down, change:
 >    -->
 >    <!-- htrc: '*_t' was present in Solr6, but then was removed in Solr7, so manually added in for HTRC work
 >	        It is now back in Solr8, but with multiValued="false" as an additinal parameter -->
->    <dynamicField name="*_t"   type="text_general" indexed="true" stored="true" multiValued="false"/>  <!-- htrc: not clear if multiValued needs to be false or true -->
+>    <dynamicField name="*_t"   type="text_general" indexed="true" stored="true" multiValued="true"/>  <!-- htrc: multiValued needs to be true -->
 >    <dynamicField name="*_txt" type="text_general" indexed="true" stored="false"/> <!-- htrc: is this change to stored="false" still relied upon anywhere? -->
 
 Add in just above:
