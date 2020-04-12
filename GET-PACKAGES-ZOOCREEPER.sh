@@ -26,7 +26,11 @@ wget https://github.com/boundary/zoocreeper/archive/master.zip -O zoocreeper-mas
     && unzip zoocreeper-master.zip \
     && cd zoocreeper-master \
     && mvn clean package
-  
+
+echo ""
+echo "To set up a Zoocreeper for Solr8, run the following:"
+echo "  /bin/cp -r zoocreeper-master zoocreeper-master-for-solr8"
+echo ""
 
 
 
