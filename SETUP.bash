@@ -134,10 +134,10 @@ fi
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     # e.g., gslis-cluster1 or gc[0-9]
     
-    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
-    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
-    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
-    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
+#    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
+#    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
+#    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
+#    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
 
     export HDFS_HEAD=hdfs://gchead:9000
     export YARN_CONF_DIR=/etc/hadoop/conf
@@ -199,7 +199,8 @@ fi
 if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
   zookeeper_config_file="$ZOOKEEPER_HOME/conf/zoo.cfg"
   zookeeper_data_dir="$ZOOKEEPER_HOME/data"
-
+  zookeeper_port=${ZOOKEEPER_SERVER##*:}
+  
   if [ ! -f "$zookeeper_config_file" ] ; then
     if [ ! -d "$zookeeper_data_dir" ] ; then
 	echo "* Creating Zookeeper dataDir:"
@@ -210,7 +211,15 @@ if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
     echo "****"
     echo "* Generating $zookeeper_config_file"
     if [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
-	cat conf/zoo-ensemble.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
+	cat conf/zoo-ensemble.cfg.in \
+	    | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" \
+	    | sed "s%@zookeeper-port@%$zookeeper_port%g" \		  
+	    > "$zookeeper_config_file"
+
+	echo "***!!!!!!!!"
+	echo "*** Warning: There are hard-wired Zookeeper port numbers for solr3,solr4,solr5 in conf/zoo-ensemble.cfg.in"
+	echo "***!!!!!!!!"
+	
 	if [ "$short_hostname" = "is-solr3" ] ; then
 	    echo "1" > "$zookeeper_data_dir/myid"
 	fi
@@ -221,7 +230,10 @@ if [ "x$ZOOKEEPER_HOME" != "x" ] ; then
 	    echo "3" > "$zookeeper_data_dir/myid"
 	fi
     else
-	cat conf/zoo.cfg.in | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" > "$zookeeper_config_file"
+	cat conf/zoo.cfg.in \
+	    | sed "s%@zookeeper-data-dir@%$zookeeper_data_dir%g" \
+	    | sed "s%@zookeeper-port@%$zookeeper_port%g" \		  
+	    > "$zookeeper_config_file"
     fi
     
     echo "****"
@@ -236,7 +248,7 @@ fi
 
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
 	
-  solr_configsets="$SOLR_TOP_LEVEL_HOME/server/solr/configsets"
+  solr_configsets="$SOLR7_TOP_LEVEL_HOME/server/solr/configsets"
   if [ ! -d "$solr_configsets/htrc_configs" ] ; then
     echo "Untarring htrc_configs.tar.gz in Solr configtests directory"
     tar xvzf conf/htrc_configs.tar.gz -C "$solr_configsets"
