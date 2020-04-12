@@ -1,6 +1,6 @@
 tickTime=2000
 dataDir=@zookeeper-data-dir@
-clientPort=8181
+clientPort=@zookeeper-port@
 
 initLimit=5
 syncLimit=2
