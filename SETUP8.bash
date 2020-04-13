@@ -209,70 +209,70 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
 fi
 
 
-if [ "x$ZOOKEEPER8_HOME" != "x" ] ; then
-  zookeeper8_config_file="$ZOOKEEPER8_HOME/conf/zoo.cfg"
-  zookeeper8_data_dir="$ZOOKEEPER8_HOME/data"
-  zookeeper8_port=${ZOOKEEPER8_SERVER##*:}
-  zookeeper8_admin_port=$((zookeeper8_port+1))
+#if [ "x$ZOOKEEPER8_HOME" != "x" ] ; then
+#  zookeeper8_config_file="$ZOOKEEPER8_HOME/conf/zoo.cfg"
+#  zookeeper8_data_dir="$ZOOKEEPER8_HOME/data"
+#  zookeeper8_port=${ZOOKEEPER8_SERVER##*:}
+#  zookeeper8_admin_port=$((zookeeper8_port+1))
 
-  if [ ! -f "$zookeeper8_config_file" ] ; then
-    if [ ! -d "$zookeeper8_data_dir" ] ; then
-	echo "* Creating Zookeeper for Solr8 dataDir:"
-	echo "*   $zookeeper8_data_dir"
-	mkdir "$zookeeper8_data_dir"
-    fi
+#   if [ ! -f "$zookeeper8_config_file" ] ; then
+#     if [ ! -d "$zookeeper8_data_dir" ] ; then
+# 	echo "* Creating Zookeeper for Solr8 dataDir:"
+# 	echo "*   $zookeeper8_data_dir"
+# 	mkdir "$zookeeper8_data_dir"
+#     fi
       
-    echo "****"
-    echo "* Generating $zookeeper8_config_file"
-    echo "*   Zookeeper for Solr8 server port: $zookeeper8_port"
-    echo "*   Zookeeper for Solr8 server admin port: $zookeeper8_admin_port"
+#     echo "****"
+#     echo "* Generating $zookeeper8_config_file"
+#     echo "*   Zookeeper for Solr8 server port: $zookeeper8_port"
+#     echo "*   Zookeeper for Solr8 server admin port: $zookeeper8_admin_port"
 
-    if [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
-	cat conf/zoo8-ensemble.cfg.in \
-	    | sed "s%@zookeeper8-data-dir@%$zookeeper8_data_dir%g" \
-	    | sed "s%@zookeeper8-port@%$zookeeper8_port%g" \
-	    | sed "s%@zookeeper8-admin-port@%$zookeeper8_admin_port%g" \
-		  > "$zookeeper8_config_file"
-	echo "***!!!!!!!!"
-	echo "*** Warning: There are hard-wired Zookeeper port numbers for solr3,solr4,solr5 in conf/zoo8-ensemble.cfg.in"
-	echo "***!!!!!!!!"
+#     if [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
+# 	cat conf/zoo8-ensemble.cfg.in \
+# 	    | sed "s%@zookeeper8-data-dir@%$zookeeper8_data_dir%g" \
+# 	    | sed "s%@zookeeper8-port@%$zookeeper8_port%g" \
+# 	    | sed "s%@zookeeper8-admin-port@%$zookeeper8_admin_port%g" \
+# 		  > "$zookeeper8_config_file"
+# 	echo "***!!!!!!!!"
+# 	echo "*** Warning: There are hard-wired Zookeeper port numbers for solr3,solr4,solr5 in conf/zoo8-ensemble.cfg.in"
+# 	echo "***!!!!!!!!"
 	
-	if [ "$short_hostname" = "is-solr3" ] ; then
-	    echo "1" > "$zookeeper8_data_dir/myid"
-	fi
-	if [ "$short_hostname" = "is-solr4" ] ; then
-	    echo "2" > "$zookeeper8_data_dir/myid"
-	fi
-	if [ "$short_hostname" = "is-solr5" ] ; then
-	    echo "3" > "$zookeeper8_data_dir/myid"
-	fi
-    else
-	cat conf/zoo8.cfg.in \
-	    | sed "s%@zookeeper8-data-dir@%$zookeeper8_data_dir%g" \
-	    | sed "s%@zookeeper8-port@%$zookeeper8_port%g" \
-	    | sed "s%@zookeeper8-admin-port@%$zookeeper8_admin_port%g" \
-	    > "$zookeeper8_config_file"
-    fi
+# 	if [ "$short_hostname" = "is-solr3" ] ; then
+# 	    echo "1" > "$zookeeper8_data_dir/myid"
+# 	fi
+# 	if [ "$short_hostname" = "is-solr4" ] ; then
+# 	    echo "2" > "$zookeeper8_data_dir/myid"
+# 	fi
+# 	if [ "$short_hostname" = "is-solr5" ] ; then
+# 	    echo "3" > "$zookeeper8_data_dir/myid"
+# 	fi
+#     else
+# 	cat conf/zoo8.cfg.in \
+# 	    | sed "s%@zookeeper8-data-dir@%$zookeeper8_data_dir%g" \
+# 	    | sed "s%@zookeeper8-port@%$zookeeper8_port%g" \
+# 	    | sed "s%@zookeeper8-admin-port@%$zookeeper8_admin_port%g" \
+# 	    > "$zookeeper8_config_file"
+#     fi
     
-    echo "****"
-  fi
-fi
+#     echo "****"
+#   fi
+# fi
 
-if [ $do_echo = 1 ] ; then        
-  echo "****"
-  echo "* Solr8 nodes: $SOLR8_NODES"
-  echo "****"
-fi
+#if [ $do_echo = 1 ] ; then        
+#  echo "****"
+#  echo "* Solr8 nodes: $SOLR8_NODES"
+#  echo "****"
+#fi
 
-if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
-	
-  solr8_configsets="$SOLR8_TOP_LEVEL_HOME/server/solr/configsets"
-  if [ ! -d "$solr8_configsets/htrc-configs-docvals" ] ; then
-##  echo "Untarring htrc_configs.tar.gz in Solr8 configtests directory"
-    ##    tar xvzf conf/htrc_configs.tar.gz -C "$solr8_configsets"
-    echo "Copying conf/htrc_configs-docvals-841 in Solr8 configtests directory: $solr8_configsets"
-    /bin/cp -r conf/htrc-configs-docvals-841 "$solr8_configsets/htrc-configs-docvals"
-  fi
-fi
+#if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
+#	
+#  solr8_configsets="$SOLR8_TOP_LEVEL_HOME/server/solr/configsets"
+#  if [ ! -d "$solr8_configsets/htrc-configs-docvals" ] ; then
+###  echo "Untarring htrc_configs.tar.gz in Solr8 configtests directory"
+#    ##    tar xvzf conf/htrc_configs.tar.gz -C "$solr8_configsets"
+#    echo "Copying conf/htrc_configs-docvals-841 in Solr8 configtests directory: $solr8_configsets"
+#    /bin/cp -r conf/htrc-configs-docvals-841 "$solr8_configsets/htrc-configs-docvals"
+#  fi
+#fi
 
 cd "$store_cwd"
