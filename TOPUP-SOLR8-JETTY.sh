@@ -5,6 +5,19 @@
 #    http://opensourceconnections.com/blog/2015/03/26/going-cross-origin-with-solr/
 
 # Also add in realm authentication for admin area
+#
+# Should probably consider changing from Basic Realm authentication through
+# servlet, to being based on:
+#   https://lucene.apache.org/solr/guide/8_4/basic-authentication-plugin.html
+# As Basic Realm does not integrate well with Solr Admin UI interface (Solr 8.4.1)
+#
+# Even after logging in to the Admin UI, creating a collection then fails
+# Inspecting the solr.log shows errors assocated with failure to authenticated
+# sub-actions that run.
+# => Workaround is to open up those sub-actions:
+#      /admin/metrics and /admin/cores
+#    in web.xml file
+
 
 if [ ! -f conf/jetty-solr8/realm.properties ] ; then
     echo "****" >&2
