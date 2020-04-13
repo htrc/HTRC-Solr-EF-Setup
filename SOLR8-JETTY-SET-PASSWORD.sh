@@ -20,3 +20,11 @@ cat conf/jetty-solr8/realm.properties.in \
     | sed "s%@solr8-admin-username@%admin%g" \
     | sed "s%@solr8-admin-password@%$solr_admin_password%g" \
     > conf/jetty-solr8/realm.properties
+
+echo ""
+echo "Next run:"
+echo "  ./SOLR8-JETTY-TOPUP.sh"
+echo "To transfer the Solr Admin UI password and other HTRC-EF specific"
+echo "custom settings to $SOLR8_TOP_LEVEL_HOME"
+echo ""
+
