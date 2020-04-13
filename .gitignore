@@ -1,0 +1,20 @@
+*~
+
+# Symbolic linked shortcuts
+maven
+solr7
+zookeeper
+solr8
+zookeeper-for-solr8
+zoocreeper-master-for-solr8
+
+# tarbars and their untarred code (java binaries, ready to run)
+solr-7*
+solr-8*
+apache-maven-*
+zookeeper-*
+apache-zookeeper-*
+
+# Zip equivalent for zoocreeper (needs to be compiled)
+zoocreeper-master.zip
+zoocreeper-master
