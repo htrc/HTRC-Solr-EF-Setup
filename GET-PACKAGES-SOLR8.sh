@@ -63,7 +63,7 @@ echo "Assuming these changes have already been spliced into the Solr8 version of
 echo "config files in ./conf/jetty-solr8/, then it is only necessary to run the following"
 echo "command to trasfer the modified config files into the Jetty area within the "
 echo "downloaded Solr8 directory:"
-echo "  ./SOLR8-TOPUP-JETTY.sh"
+echo "  ./SOLR8-JETTY-TOPUP.sh"
 echo ""
 echo "To add in the custom Solr Schema used by HTRC-EF run:"
 echo "  ./SOLR8-TOPUP-CONFIGSETS.sh"
