@@ -31,8 +31,8 @@ if [ $get_solr = "y" ] ; then
     echo "***"
     echo ""
     /bin/rm -f solr-$solr_ver.tgz solr8
-#    wget http://archive.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
-     wget http://www.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
+#     wget http://www.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
+    wget http://archive.apache.org/dist/lucene/solr/$solr_ver/solr-$solr_ver.tgz \
 	&& tar xvzf solr-$solr_ver.tgz \
 	&& ln -s solr-$solr_ver solr8 \
 	&& echo && echo "Created symbolic link 'solr8'"
