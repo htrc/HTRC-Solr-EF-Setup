@@ -87,8 +87,9 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   export SOLR_JAVA_MEM="-Xmx14g"
 
 elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
-  export ZOOKEEPER8_SERVER=solr3:9191
-
+#  export ZOOKEEPER8_SERVER=solr3:9191
+  export ZOOKEEPER8_SERVER_ENSEMBLE=solr3:9191,solr4:9191,solr5:9191
+  
 #  export SOLR8_PID_DIR="$HTRC_EF_PACKAGE_HOME/solr8-jetty-pids"
 #  if [ ! -d "$SOLR8_PID_DIR" ] ; then
 #      mkdir "$SOLR8_PID_DIR"
@@ -115,7 +116,7 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
 
   # consider making this /opt/ ????
   #export SOLR8_SERVER_BASE_JETTY_DIR=/disk1
-  export SOLR8_SERVER_BASE_JETTY_DIR=/var/local/solr8-jetty-servers
+  export SOLR8_SERVER_BASE_JETTY_DIR=/usr/local/solr8-jetty-servers
   
   # 14g used for the solr1 + solr2 config
   # solr3-6 config uses less shards per box, so bump up the value slightly
