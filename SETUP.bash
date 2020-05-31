@@ -80,7 +80,7 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   export SOLR_JAVA_MEM="-Xmx14g"
 
 elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
-  export ZOOKEEPER_SERVER=solr3:8181
+  export ZOOKEEPER_SERVER_ENSEMBLE=solr3:8181,solr4:8181,solr5:8181
 
   export SOLR_PID_DIR="$HTRC_EF_PACKAGE_HOME/solr-jetty-pids"
   if [ ! -d "$SOLR_PID_DIR" ] ; then
