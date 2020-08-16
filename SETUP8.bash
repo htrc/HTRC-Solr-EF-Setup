@@ -36,8 +36,14 @@ case $- in
 	;;
 esac
 
-if [ "x$JAVA_HOME" = "x" ] ; then    
-    export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+# Some (older) Java-based programs like to have JAVA_HOME set
+# to operate smoothly.  Cover-off this aspect here
+if [ "x$JAVA_HOME" = "x" ] ; then
+    if [ -d "/usr/lib/jvm/java-11-openjdk-amd64" ] ; then
+	export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+    else
+	export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+    fi
 fi
 
 export PATH="$JAVA_HOME/bin:$PATH"
