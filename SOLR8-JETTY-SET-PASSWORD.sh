@@ -25,6 +25,11 @@ echo ""
 echo "Next run:"
 echo "  ./SOLR8-JETTY-TOPUP.sh"
 echo "To transfer the Solr Admin UI password and other HTRC-EF specific"
-echo "custom settings to $SOLR8_TOP_LEVEL_HOME"
+echo "custom settings to '$SOLR8_TOP_LEVEL_HOME'"
 echo ""
+
+if [ "x$SOLR8_TOP_LEVEL_HOME" = "x" ] ; then
+    echo "Error: environment variable SOLR8_TOP_LEVEL_HOME not set.  Have you sourced SETUP8.bash?" >&2
+    echo "Have you added . `pwd`/SETUP8.bash to your ~/.bashrc file?" >&2
+fi
 
