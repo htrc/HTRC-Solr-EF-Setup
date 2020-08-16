@@ -96,13 +96,15 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
   export SOLR_JAVA_MEM="-Xmx14g"
 
-elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
+elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-peachpalm" ] || [ "${short_hostname}" = "is-royalpalm" ] ; then
   export ZOOKEEPER8_SERVER_ENSEMBLE=solr3:9191,solr4:9191,solr5:9191
   
   export SOLR8_NODES="solr3:9983 solr3:9984 solr3:9985 solr3:9986 solr3:9987 solr3:9988 solr3:9989 solr3:9990"
   export SOLR8_NODES="$SOLR8_NODES solr4:9983 solr4:9984 solr4:9985 solr4:9986 solr4:9987 solr4:9988 solr4:9989 solr4:9990"
   export SOLR8_NODES="$SOLR8_NODES solr5:9983 solr5:9984 solr5:9985 solr5:9986 solr5:9987 solr5:9988 solr5:9989 solr5:9990"
   export SOLR8_NODES="$SOLR8_NODES solr6:9983 solr6:9984 solr6:9985 solr6:9986 solr6:9987 solr6:9988 solr6:9989 solr6:9990"
+  export SOLR8_NODES="$SOLR8_NODES peachpalm:9983 peachpalm:9984 peachpalm:9985 peachpalm:9986 peachpalm:9987 peachpalm:9988 peachpalm:9989 peachpalm:9990"
+  export SOLR8_NODES="$SOLR8_NODES royalpalm:9983 royalpalm:9984 royalpalm:9985 royalpalm:9986 royalpalm:9987 royalpalm:9988 royalpalm:9989 royalpalm:9990"
 
   root_solr8_shard_dir=htrc-ef-solr8-shards
   # solr3
@@ -117,8 +119,15 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
   # solr6  
   export SOLR8_SHARDS="$SOLR8_SHARDS /disk1/$root_solr8_shard_dir /disk2/$root_solr8_shard_dir /disk3/$root_solr8_shard_dir /disk4/$root_solr8_shard_dir"
   export SOLR8_SHARDS="$SOLR8_SHARDS /disk5/$root_solr8_shard_dir /disk6/$root_solr8_shard_dir /disk7/$root_solr8_shard_dir /disk8/$root_solr8_shard_dir"
+  # solr7/peachpalm
+  export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node1/$root_solr8_shard_dir /solr-data/node2/$root_solr8_shard_dir /solr-data/node3/$root_solr8_shard_dir /solr-data/node4/$root_solr8_shard_dir"
+  export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node5/$root_solr8_shard_dir /solr-data/node6/$root_solr8_shard_dir /solr-data/node7/$root_solr8_shard_dir /solr-data/node8/$root_solr8_shard_dir"
+  # solr8/royalalm
+  export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node1/$root_solr8_shard_dir /solr-data/node2/$root_solr8_shard_dir /solr-data/node3/$root_solr8_shard_dir /solr-data/node4/$root_solr8_shard_dir"
+  export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node5/$root_solr8_shard_dir /solr-data/node6/$root_solr8_shard_dir /solr-data/node7/$root_solr8_shard_dir /solr-data/node8/$root_solr8_shard_dir"
 
-  # consider making this /opt/ ????
+  
+  # Consider making this /opt/ ????
   export SOLR8_SERVER_BASE_JETTY_DIR=/usr/local/solr8-jetty-servers
   
   # 14g used for the solr1 + solr2 config
