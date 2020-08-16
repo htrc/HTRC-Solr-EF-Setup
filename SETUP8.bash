@@ -16,10 +16,10 @@ cd "$htrc_ef_home"
 short_hostname=`uname -n | sed 's/\..*//'`
 
 # ****
-# The reason for controllilng a NETWOR_HOME, separate to
+# The reason for controllilng a NETWORK_HOME, separate to
 # a PACKAGE_HOME is no longer particularly strong, and
 # the following can be simplified further
-
+# ****
 export HTRC_EF_NETWORK_HOME=`pwd`
 export HTRC_EF_PACKAGE_HOME=`pwd`
 
@@ -38,11 +38,14 @@ esac
 
 # Some (older) Java-based programs like to have JAVA_HOME set
 # to operate smoothly.  Cover-off this aspect here
+jdk_version=""
 if [ "x$JAVA_HOME" = "x" ] ; then
     if [ -d "/usr/lib/jvm/java-11-openjdk-amd64" ] ; then
 	export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+	jdk_version="1.11"
     else
 	export JAVA_HOME="/usr/lib/jvm/j2sdk1.8-oracle"
+	jdk_version="1.8"
     fi
 fi
 
@@ -55,11 +58,12 @@ export _JAVA_OPTIONS=
 #export _JAVA_OPTIONS="-XX:+HeapDumpOnOutOfMemoryError"
 
 if [ $do_echo = 1 ] ; then    
-    echo "* Added in JDK 1.8 into PATH"
+    echo "* Added in JDK $jdk_version into PATH"
     echo "* set _JAVA_OPTIONS to the empty string"
 fi
 
-# Note: 'gchead' stopped working at some point, so changed to specifying its IP value 
+# Note: 'gchead' on Hadoop/Spark cluster stopped working at some point,
+# so changed to specifying its IP value directly
 #export SPARK_MASTER_HOST=gchead
 export SPARK_MASTER_HOST=192.168.64.1
 
@@ -93,13 +97,7 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   export SOLR_JAVA_MEM="-Xmx14g"
 
 elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
-#  export ZOOKEEPER8_SERVER=solr3:9191
   export ZOOKEEPER8_SERVER_ENSEMBLE=solr3:9191,solr4:9191,solr5:9191
-  
-#  export SOLR8_PID_DIR="$HTRC_EF_PACKAGE_HOME/solr8-jetty-pids"
-#  if [ ! -d "$SOLR8_PID_DIR" ] ; then
-#      mkdir "$SOLR8_PID_DIR"
-#  fi
   
   export SOLR8_NODES="solr3:9983 solr3:9984 solr3:9985 solr3:9986 solr3:9987 solr3:9988 solr3:9989 solr3:9990"
   export SOLR8_NODES="$SOLR8_NODES solr4:9983 solr4:9984 solr4:9985 solr4:9986 solr4:9987 solr4:9988 solr4:9989 solr4:9990"
@@ -121,7 +119,6 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
   export SOLR8_SHARDS="$SOLR8_SHARDS /disk5/$root_solr8_shard_dir /disk6/$root_solr8_shard_dir /disk7/$root_solr8_shard_dir /disk8/$root_solr8_shard_dir"
 
   # consider making this /opt/ ????
-  #export SOLR8_SERVER_BASE_JETTY_DIR=/disk1
   export SOLR8_SERVER_BASE_JETTY_DIR=/usr/local/solr8-jetty-servers
   
   # 14g used for the solr1 + solr2 config
@@ -158,7 +155,7 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
 #    export SOLR8_NODES="$SOLR8_NODES solr2-s:9988 solr2-s:9989 solr2-s:9990 solr2-s:9991 solr2-s:9992"
 
 ## ## ##
-    # But this would still be used ... watch out incase 'gchead'not resolving correctly    
+    # But this would still be used ... watch out incase 'gchead' not resolving correctly    
     export HDFS_HEAD=hdfs://gchead:9000
     export YARN_CONF_DIR=/etc/hadoop/conf
 fi
@@ -215,71 +212,5 @@ if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
   fi
 fi
 
-
-#if [ "x$ZOOKEEPER8_HOME" != "x" ] ; then
-#  zookeeper8_config_file="$ZOOKEEPER8_HOME/conf/zoo.cfg"
-#  zookeeper8_data_dir="$ZOOKEEPER8_HOME/data"
-#  zookeeper8_port=${ZOOKEEPER8_SERVER##*:}
-#  zookeeper8_admin_port=$((zookeeper8_port+1))
-
-#   if [ ! -f "$zookeeper8_config_file" ] ; then
-#     if [ ! -d "$zookeeper8_data_dir" ] ; then
-# 	echo "* Creating Zookeeper for Solr8 dataDir:"
-# 	echo "*   $zookeeper8_data_dir"
-# 	mkdir "$zookeeper8_data_dir"
-#     fi
-      
-#     echo "****"
-#     echo "* Generating $zookeeper8_config_file"
-#     echo "*   Zookeeper for Solr8 server port: $zookeeper8_port"
-#     echo "*   Zookeeper for Solr8 server admin port: $zookeeper8_admin_port"
-
-#     if [ "${short_hostname%[3-6]}" = "is-solr" ] ; then
-# 	cat conf/zoo8-ensemble.cfg.in \
-# 	    | sed "s%@zookeeper8-data-dir@%$zookeeper8_data_dir%g" \
-# 	    | sed "s%@zookeeper8-port@%$zookeeper8_port%g" \
-# 	    | sed "s%@zookeeper8-admin-port@%$zookeeper8_admin_port%g" \
-# 		  > "$zookeeper8_config_file"
-# 	echo "***!!!!!!!!"
-# 	echo "*** Warning: There are hard-wired Zookeeper port numbers for solr3,solr4,solr5 in conf/zoo8-ensemble.cfg.in"
-# 	echo "***!!!!!!!!"
-	
-# 	if [ "$short_hostname" = "is-solr3" ] ; then
-# 	    echo "1" > "$zookeeper8_data_dir/myid"
-# 	fi
-# 	if [ "$short_hostname" = "is-solr4" ] ; then
-# 	    echo "2" > "$zookeeper8_data_dir/myid"
-# 	fi
-# 	if [ "$short_hostname" = "is-solr5" ] ; then
-# 	    echo "3" > "$zookeeper8_data_dir/myid"
-# 	fi
-#     else
-# 	cat conf/zoo8.cfg.in \
-# 	    | sed "s%@zookeeper8-data-dir@%$zookeeper8_data_dir%g" \
-# 	    | sed "s%@zookeeper8-port@%$zookeeper8_port%g" \
-# 	    | sed "s%@zookeeper8-admin-port@%$zookeeper8_admin_port%g" \
-# 	    > "$zookeeper8_config_file"
-#     fi
-    
-#     echo "****"
-#   fi
-# fi
-
-#if [ $do_echo = 1 ] ; then        
-#  echo "****"
-#  echo "* Solr8 nodes: $SOLR8_NODES"
-#  echo "****"
-#fi
-
-#if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Cloud/" ] ; then
-#	
-#  solr8_configsets="$SOLR8_TOP_LEVEL_HOME/server/solr/configsets"
-#  if [ ! -d "$solr8_configsets/htrc-configs-docvals" ] ; then
-###  echo "Untarring htrc_configs.tar.gz in Solr8 configtests directory"
-#    ##    tar xvzf conf/htrc_configs.tar.gz -C "$solr8_configsets"
-#    echo "Copying conf/htrc_configs-docvals-841 in Solr8 configtests directory: $solr8_configsets"
-#    /bin/cp -r conf/htrc-configs-docvals-841 "$solr8_configsets/htrc-configs-docvals"
-#  fi
-#fi
 
 cd "$store_cwd"
