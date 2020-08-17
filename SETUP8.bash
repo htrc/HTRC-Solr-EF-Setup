@@ -127,7 +127,9 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-pe
   export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node5/$root_solr8_shard_dir /solr-data/node6/$root_solr8_shard_dir /solr-data/node7/$root_solr8_shard_dir /solr-data/node8/$root_solr8_shard_dir"
 
   
-  # Consider making this /opt/ ????
+  # Consider making this /opt/solr8-jetty-servers rather than /usr/local?
+  # In any event, ingest causes a log of logging on Solr, so whether /usr/local or /opt/
+  # that in tern need to be a symbolic link to an area of local disk with considerably more storage  
   export SOLR8_SERVER_BASE_JETTY_DIR=/usr/local/solr8-jetty-servers
   
   # 14g used for the solr1 + solr2 config
