@@ -29,6 +29,8 @@ wget https://github.com/boundary/zoocreeper/archive/master.zip -O zoocreeper-mas
 
 echo ""
 echo "To set up a Zoocreeper for Solr8, run the following:"
+echo "  /bin/mv zoocreeper-master zoocreeper-master-for-solr8"
+echo "Or to allow Zoocreeper to operate for solr7 and solr8 installs in parallel"
 echo "  /bin/cp -r zoocreeper-master zoocreeper-master-for-solr8"
 echo ""
 
