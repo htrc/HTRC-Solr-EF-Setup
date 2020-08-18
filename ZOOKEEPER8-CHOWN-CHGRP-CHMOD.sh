@@ -1,7 +1,7 @@
 #!/bin/bash
 
 systemctl_user=${1:-www-data}
-systemctl_group=${1:-htrc}
+systemctl_group=${2:-htrc}
 
 zookeeper_home="zookeeper-for-solr8"
 
