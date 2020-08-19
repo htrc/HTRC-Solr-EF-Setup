@@ -2,7 +2,9 @@
 
 zookeeper8_config_file="$ZOOKEEPER8_HOME/conf/zoo.cfg"
 zookeeper8_data_dir="$ZOOKEEPER8_HOME/data"
-zookeeper8_port=${ZOOKEEPER8_SERVER##*:}
+
+zookeeper8_server=${ZOOKEEPER8_SERVER_ENSEMBLE%%,*}
+zookeeper8_port=${zookeeper8_server##*:}
 zookeeper8_admin_port=$((zookeeper8_port+1))
 
 if [ ! -d "$zookeeper8_data_dir" ] ; then
