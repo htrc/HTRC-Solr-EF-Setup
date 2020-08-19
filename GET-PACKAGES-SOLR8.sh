@@ -41,7 +41,7 @@ if [ $get_solr = "y" ] ; then
     echo ""
 fi
 
-if [ ! -d zookeeper-master ] ; then
+if [ ! -d zoocreeper-master ] ; then
   echo ""
   echo "***"
   echo "Now run:"
