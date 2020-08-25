@@ -33,3 +33,11 @@ sudo chmod -R g+w $solr8_shard_dirs
 ls -ld $solr8_shard_dirs
 echo ""
 
+echo "Also fixing up: "
+echo "  $SOLR8_SERVER_BASE_JETTY_DIR/"
+sudo chown -R $systemctl_user $SOLR8_SERVER_BASE_JETTY_DIR/
+sudo chmod -R g+w $SOLR8_SERVER_BASE_JETTY_DIR/.
+
+ls -l $SOLR8_SERVER_BASE_JETTY_DIR/.
+echo ""
+
