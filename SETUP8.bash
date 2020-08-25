@@ -103,8 +103,10 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-pe
   export SOLR8_NODES="$SOLR8_NODES solr4:9983 solr4:9984 solr4:9985 solr4:9986 solr4:9987 solr4:9988 solr4:9989 solr4:9990"
   export SOLR8_NODES="$SOLR8_NODES solr5:9983 solr5:9984 solr5:9985 solr5:9986 solr5:9987 solr5:9988 solr5:9989 solr5:9990"
   export SOLR8_NODES="$SOLR8_NODES solr6:9983 solr6:9984 solr6:9985 solr6:9986 solr6:9987 solr6:9988 solr6:9989 solr6:9990"
-  export SOLR8_NODES="$SOLR8_NODES peachpalm:9983 peachpalm:9984 peachpalm:9985 peachpalm:9986 peachpalm:9987 peachpalm:9988 peachpalm:9989 peachpalm:9990"
-  export SOLR8_NODES="$SOLR8_NODES royalpalm:9983 royalpalm:9984 royalpalm:9985 royalpalm:9986 royalpalm:9987 royalpalm:9988 royalpalm:9989 royalpalm:9990"
+#  export SOLR8_NODES="$SOLR8_NODES peachpalm:9983 peachpalm:9984 peachpalm:9985 peachpalm:9986 peachpalm:9987 peachpalm:9988 peachpalm:9989 peachpalm:9990"
+#  export SOLR8_NODES="$SOLR8_NODES royalpalm:9983 royalpalm:9984 royalpalm:9985 royalpalm:9986 royalpalm:9987 royalpalm:9988 royalpalm:9989 royalpalm:9990"
+  export SOLR8_NODES="$SOLR8_NODES solr7:9983 solr7:9984 solr7:9985 solr7:9986 solr7:9987 solr7:9988 solr7:9989 solr7:9990"
+  export SOLR8_NODES="$SOLR8_NODES solr8:9983 solr8:9984 solr8:9985 solr8:9986 solr8:9987 solr8:9988 solr8:9989 solr8:9990"
 
   root_solr8_shard_dir=htrc-ef-solr8-shards
   # solr3
