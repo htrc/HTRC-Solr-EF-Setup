@@ -139,7 +139,8 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-pe
   # Note: JRE performance will drop off if value goes about 32G as JRE needs
   #       to switch from using compressed pointers to long pointers
   #       -- see: https://lucene.apache.org/solr/guide/7_4/taking-solr-to-production.html
-  export SOLR_JAVA_MEM="-Xmx20g"
+#  export SOLR_JAVA_MEM="-Xmx20g"
+  export SOLR_JAVA_MEM="-Xmx10g"
 
   # tail of previous vals used over time (from most recent to oldest)
   # export SOLR_JAVA_MEM="-Xmx14g"
