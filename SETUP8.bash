@@ -96,7 +96,8 @@ if [ "${short_hostname%[1-2]}" = "solr" ] ; then
   # export SOLR_JAVA_MEM="-Xms5g -Xmx7g"
   export SOLR_JAVA_MEM="-Xmx14g"
 
-elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-peachpalm" ] || [ "${short_hostname}" = "is-royalpalm" ] ; then
+#elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-peachpalm" ] || [ "${short_hostname}" = "is-royalpalm" ] ; then
+elif [ "${short_hostname%[3-8]}" = "is-solr" ] ; then
   export ZOOKEEPER8_SERVER_ENSEMBLE=solr3:9191,solr4:9191,solr5:9191
   
   export SOLR8_NODES="solr3:9983 solr3:9984 solr3:9985 solr3:9986 solr3:9987 solr3:9988 solr3:9989 solr3:9990"
@@ -121,10 +122,10 @@ elif [ "${short_hostname%[3-6]}" = "is-solr" ] || [ "${short_hostname}" = "is-pe
   # solr6  
   export SOLR8_SHARDS="$SOLR8_SHARDS /disk1/$root_solr8_shard_dir /disk2/$root_solr8_shard_dir /disk3/$root_solr8_shard_dir /disk4/$root_solr8_shard_dir"
   export SOLR8_SHARDS="$SOLR8_SHARDS /disk5/$root_solr8_shard_dir /disk6/$root_solr8_shard_dir /disk7/$root_solr8_shard_dir /disk8/$root_solr8_shard_dir"
-  # solr7/peachpalm
+  # solr7 (formerly peachpalm)
   export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node1/$root_solr8_shard_dir /solr-data/node2/$root_solr8_shard_dir /solr-data/node3/$root_solr8_shard_dir /solr-data/node4/$root_solr8_shard_dir"
   export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node5/$root_solr8_shard_dir /solr-data/node6/$root_solr8_shard_dir /solr-data/node7/$root_solr8_shard_dir /solr-data/node8/$root_solr8_shard_dir"
-  # solr8/royalalm
+  # solr8 (formerly royalpalm)
   export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node1/$root_solr8_shard_dir /solr-data/node2/$root_solr8_shard_dir /solr-data/node3/$root_solr8_shard_dir /solr-data/node4/$root_solr8_shard_dir"
   export SOLR8_SHARDS="$SOLR8_SHARDS /solr-data/node5/$root_solr8_shard_dir /solr-data/node6/$root_solr8_shard_dir /solr-data/node7/$root_solr8_shard_dir /solr-data/node8/$root_solr8_shard_dir"
 
