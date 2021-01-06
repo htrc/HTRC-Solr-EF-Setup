@@ -145,8 +145,27 @@ elif [ "${short_hostname%[3-8]}" = "is-solr" ] ; then
   #export SOLR_JAVA_MEM="-Xmx16g"
   ##export SOLR_JAVA_MEM="-Xmx16384m" # equiv of 16g
   # Trim off 1/4 of a gigabyte off this (per core) to give OS room to breath!
-  export SOLR_JAVA_MEM="-Xmx16128m"
-    
+  #export SOLR_JAVA_MEM="-Xmx16128m"
+
+  case $short_hostname in
+
+    is-solr[3-6])
+      # These machines are maxed out with 256 GB of memory
+      # Trim 1/2 GB off this (x6, per core) to give OS room to breath!
+      export SOLR_JAVA_MEM="-Xmx32256m"
+      ;;
+
+    is-solr[7-8])
+      # These machines have 128 GB of memory
+      # Trim 1/4 GB off this (x6, per core) to give OS room to breath!
+      export SOLR_JAVA_MEM="-Xmx16128m"
+      ;;
+
+    *)
+      # default val for safety!
+      export SOLR_JAVA_MEM="-Xmx16128m"
+      ;;
+  esac  
   
   # tail of previous vals used over time (from most recent to oldest)
   # export SOLR_JAVA_MEM="-Xmx14g"
