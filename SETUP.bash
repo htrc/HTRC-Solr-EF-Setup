@@ -94,10 +94,10 @@ export HTRC_EF_NETWORK_HOME=`pwd`
 if [ -d "$HTRC_EF_NETWORK_HOME/HTRC-Solr-EF-Ingester/" ] ; then
     # e.g., gslis-cluster1 or gc[0-9]
     
-    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
-    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
-    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
-    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
+#    export SOLR_NODES="solr1-s:8983 solr1-s:8984 solr1-s:8985 solr1-s:8986 solr1-s:8987"
+#    export SOLR_NODES="$SOLR_NODES solr1-s:8988 solr1-s:8989 solr1-s:8990 solr1-s:8991 solr1-s:8992"
+#    export SOLR_NODES="$SOLR_NODES solr2-s:8983 solr2-s:8984 solr2-s:8985 solr2-s:8986 solr2-s:8987"
+#    export SOLR_NODES="$SOLR_NODES solr2-s:8988 solr2-s:8989 solr2-s:8990 solr2-s:8991 solr2-s:8992"
 
     export HDFS_HEAD=hdfs://gchead:9000
     export YARN_CONF_DIR=/etc/hadoop/conf

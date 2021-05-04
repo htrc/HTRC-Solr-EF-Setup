@@ -37,11 +37,18 @@ if [ $get_spark = "y" ] ; then
   echo "***"
   echo "Spark 2.0.1 for Hadoop 2.6"
   echo "***"
+    
   #  wget http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.7.tgz
-  /bin/rm -f spark-2.0.1-bin-hadoop2.6.tgz
-  wget http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.6.tgz \
-      && tar xvzf spark-2.0.1-bin-hadoop2.6.tgz \
-      && ln -s spark-2.0.1-bin-hadoop2.6 spark \
+
+#  /bin/rm -f spark-2.0.1-bin-hadoop2.6.tgz
+#  wget http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.6.tgz \
+#      && tar xvzf spark-2.0.1-bin-hadoop2.6.tgz \
+#      && ln -s spark-2.0.1-bin-hadoop2.6 spark \
+				
+  /bin/rm -f spark-2.4.0-bin-hadoop2.6.tgz spark
+  wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.6.tgz \
+      && tar xvzf spark-2.4.0-bin-hadoop2.6.tgz \
+      && ln -s spark-2.4.0-bin-hadoop2.6 spark \
       && echo && echo "Created symbolic link 'spark'"
   echo "***"
   echo ""
