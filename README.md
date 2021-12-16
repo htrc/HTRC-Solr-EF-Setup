@@ -10,7 +10,7 @@ directory, you will probably want to do either:
 
 or
 
- git clone http://github.com/htrc/HTRC-Solr-EF-Ingester
+ git clone http://github.com/htrc/HTRC-Solr-EF-Cloud
 
 See the respective files:
 
